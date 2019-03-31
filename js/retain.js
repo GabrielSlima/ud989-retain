@@ -1,4 +1,11 @@
 $(function(){
+	var now = new Date();
+	console.log(now.getMonth() + 1);
+	console.log(now.getFullYear());
+	console.log(now.getDate());
+	console.log(now.getHours());
+	console.log(now.getMinutes());
+	console.log(now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear() + ' ' + now.getHours() + ':' + now.getMinutes());
 
     var model = {
         init: function() {
@@ -7,6 +14,7 @@ $(function(){
             }
         },
         add: function(obj) {
+		console.log(obj);
             var data = JSON.parse(localStorage.notes);
             data.push(obj);
             localStorage.notes = JSON.stringify(data);
@@ -18,9 +26,11 @@ $(function(){
 
 
     var octopus = {
-        addNewNote: function(noteStr) {
+        addNewNote: function(noteStr, hours) {
+		console.log(hours);
             model.add({
-                content: noteStr
+                content: noteStr,
+		postTime: hours
             });
             view.render();
         },
@@ -42,7 +52,7 @@ $(function(){
             var newNoteForm = $('#new-note-form');
             var newNoteContent = $('#new-note-content');
             newNoteForm.submit(function(e){
-                octopus.addNewNote(newNoteContent.val());
+                octopus.addNewNote(newNoteContent.val(), now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear() + ' ' + now.getHours() + ':' + now.getMinutes());
                 newNoteContent.val('');
                 e.preventDefault();
             });
@@ -52,7 +62,7 @@ $(function(){
             var htmlStr = '';
             octopus.getNotes().forEach(function(note){
                 htmlStr += '<li class="note">'+
-                        note.content +
+                        note.content + '<br>' + note.postTime + 
                     '</li>';
             });
             this.noteList.html( htmlStr );
